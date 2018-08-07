@@ -1,14 +1,14 @@
 
 const express = require('express');
 const app = express();
-const cors = require('cors')
+const cors = require('cors');
 const JSON_FILE = 'src/data/movies.json';
-const fs = require('fs')
+const fs = require('fs');
 
 const corsOptions = {
-  origin: 'http://localhost:8081',
+  origin: ['http://localhost:8080', 'http://192.168.1.10:8080','http://localhost:8081', 'http://192.168.1.10:8081'],
   optionsSuccessStatus: 200
-}
+};
 app.use(cors(corsOptions));
 
 
@@ -23,17 +23,30 @@ app.get('/films', function (req, res) {
         img: film.img,
         titre: film.titre
       }
-    })
+    });
 
     res.send(filmsFiltered)
   })
-})
+});
 
-app.get('/films/:id', function(req, res){
-  console.log(req.id)
-    res.send(req.id)
-})
+app.get('/films/:id', function(req, res) {
+    let id = req.params.id;
+
+        if(!isNaN( parseInt(id, 10))){
+            fs.readFile(JSON_FILE, 'utf8', (err, data) => {
+                let films = JSON.parse(data);
+                const film = films['films'].filter(function (film) {
+                    return film.id == id
+                });
+                res.send(film[0].resume)
+            })
+        }else{
+            res.send('error');
+        }
+
+});
+
 
 app.listen(8005, function () {
-  console.log('listening on port 5000!')
-})
+  console.log('listening on port 8005!')
+});
