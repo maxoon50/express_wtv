@@ -1,0 +1,27 @@
+{
+  "name": "express_wtv",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxoon50/express_wtv.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maxoon50/express_wtv/issues"
+  },
+  "homepage": "https://github.com/maxoon50/express_wtv#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^1.18.3"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
