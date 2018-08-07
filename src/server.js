@@ -1,8 +1,11 @@
 
 const express = require('express');
 const app = express();
+var cors = require('cors')
 const JSON_FILE = 'src/data/movies.json';
 const fs = require('fs')
+
+app.use(cors());
 
 app.get('/ping', function (req, res) {
   res.send('pong')
