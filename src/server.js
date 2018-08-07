@@ -1,11 +1,15 @@
 
 const express = require('express');
 const app = express();
-var cors = require('cors')
+const cors = require('cors')
 const JSON_FILE = 'src/data/movies.json';
 const fs = require('fs')
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:8081',
+  optionsSuccessStatus: 200 
+}
+app.use(cors(corsOptions));
 
 app.get('/ping', function (req, res) {
   res.send('pong')
@@ -13,6 +17,7 @@ app.get('/ping', function (req, res) {
 
 app.get('/films', function(req, res){
   fs.readFile(JSON_FILE, 'utf8', (err, data)=>{
+    // res.header('Access-Control-Allow-Origin', 'http://localhost:8081');
     res.json(JSON.parse(data))
   })
 })
