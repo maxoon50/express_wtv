@@ -33,7 +33,6 @@ app.get('/films/:id', function(req, res) {
     let id = req.params.id;
 
         if(!isNaN( parseInt(id, 10))){
-            setTimeout(()=>{
                 fs.readFile(JSON_FILE, 'utf8', (err, data) => {
                     let films = JSON.parse(data);
                     const film = films['films'].filter(function (film) {
@@ -41,8 +40,6 @@ app.get('/films/:id', function(req, res) {
                     });
                     res.send(film[0].resume)
                 })
-            },1500)
-
         }else{
             res.send('error');
         }
