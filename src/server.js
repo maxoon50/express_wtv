@@ -4,6 +4,9 @@ const app = express();
 const cors = require('cors');
 const JSON_FILE = 'src/data/movies.json';
 const fs = require('fs');
+let multer  = require('multer')
+let upload = multer({ dest: 'uploads/' }).single('file')
+
 let bodyParser = require('body-parser')
 
 const corsOptions = {
@@ -49,9 +52,19 @@ app.get('/films/:id', function(req, res) {
 
 });
 
-app.post('/film',urlencodedParser, function(req, res) {
-  console.log(req.body)
-  fs.readFile(JSON_FILE, 'utf8', function readFileCallback(err, data){
+app.post('/film', function(req, res) {
+    upload(req, res, function (err) {
+        console.log(req.file)
+        let datas = JSON.parse(req.body.datas);
+        //datas.titre, datas.resume
+        if (err) {
+            // An error occurred when uploading
+            return
+        }
+
+    })
+
+/*  fs.readFile(JSON_FILE, 'utf8', function readFileCallback(err, data){
     if (err){
         console.log(err);
     } else {
@@ -61,8 +74,9 @@ app.post('/film',urlencodedParser, function(req, res) {
     fs.writeFile(JSON_FILE, json, 'utf8', ()=>{
       console.log('ok')
     });
-}});
+}});*/
 })
+
 
 
 app.listen(8005, function () {
