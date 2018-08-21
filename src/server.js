@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -58,23 +57,14 @@ app.post('/film', function(req, res) {
         let datas = JSON.parse(req.body.datas);
         //datas.titre, datas.resume
         if (err) {
-            // An error occurred when uploading
-            return
+            res.status(500);
+            res.render('error', { error: err });
+            return res;
+        }else{
+            res.status(200);
+            res.send('ok')
         }
-
     })
-
-/*  fs.readFile(JSON_FILE, 'utf8', function readFileCallback(err, data){
-    if (err){
-        console.log(err);
-    } else {
-    let obj = JSON.parse(data);
-    obj.films.push(req.body);
-    let json = JSON.stringify(obj);
-    fs.writeFile(JSON_FILE, json, 'utf8', ()=>{
-      console.log('ok')
-    });
-}});*/
 })
 
 
