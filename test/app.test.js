@@ -1,9 +1,12 @@
 import supertest from 'supertest'
 import app from '../src/app'
 
+const fs = require('fs');
+
 // supertest permet de tester des URL
 // done est la fonction de callback de mocha
 describe('============ TEST END POINT URL ============', () => {
+
     describe('==> GET /movies', () => {
         it('should send list of movies', done => {
             supertest(app)
@@ -59,7 +62,7 @@ describe('============ TEST END POINT URL ============', () => {
                 .attach('file', 'public/imgs/cinema.jpg')
                 .expect(200)
                 .end(done);
-        })
+        });
 
         it('should send error when posting empty form', done => {
             supertest(app)
@@ -68,8 +71,17 @@ describe('============ TEST END POINT URL ============', () => {
                 .field('datas', JSON.stringify({titre: '', resume: ''}))
                 .expect(400)
                 .end(done);
+        });
+    });
+    describe('==> DELETE /movies/id', () => {
+        it('should delete a  movie', done => {
+            supertest(app)
+                .del('/films/12')
+                .expect(200)
+                .end(done);
         })
     });
+
 });
 
 
