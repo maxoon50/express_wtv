@@ -73,6 +73,28 @@ describe('============ TEST END POINT URL ============', () => {
                 .end(done);
         });
     });
+
+    describe('==> PUT /film', () => {
+        it('should send a 200 when modify film', done => {
+            supertest(app)
+                .post('/film/7')
+                .field('Content-Type', 'multipart/form-data')
+                .field('datas', JSON.stringify({titre: 'test', resume: 'resume test'}))
+                .attach('file', 'public/imgs/cinema.jpg')
+                .expect(200)
+                .end(done);
+        });
+
+        it('should send error when modify and empty form', done => {
+            supertest(app)
+                .post('/film/7')
+                .field('Content-Type', 'multipart/form-data')
+                .field('datas', JSON.stringify({titre: '', resume: ''}))
+                .expect(400)
+                .end(done);
+        });
+    });
+
     describe('==> DELETE /movies/id', () => {
         it('should delete a  movie', done => {
             supertest(app)

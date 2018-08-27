@@ -75,38 +75,58 @@ app.delete('/films/:id', function (req, res) {
 });
 
 
-app.post('/film', function (req, res) {
+app.post('/film/:id?', function (req, res) {
     let errors = [];
     upload(req, res, function (err) {
         if (err) {
             return res.status(500).send({error: err})
         } else {
+
             let datas = JSON.parse(req.body.datas);
-            if (req.file == null) {
-                errors.push('file');
-            }
-            Object.keys(datas).forEach(elt => {
-                if (!datas[elt] || datas[elt].trim().length === 0) {
-                    errors.push(elt);
-                }
-            });
+            checkErrors(errors, datas, req);
+
             if (errors.length > 0) {
                 return res.status(400).send({error: 'missing data', errors});
-            }
-            fs.readFile(config.get('movies_data'), 'utf8', function readFileCallback(err, data) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    let obj = JSON.parse(data);
-                    obj.push(datas);
-                    let json = JSON.stringify(obj);
-                    fs.writeFile(config.get('movies_data'), json, 'utf8', () => console.log(''));
-                }
-            });
+            } else {
 
-            return res.status(200).send('ok');
+                fs.readFile(config.get('movies_data'), 'utf8', function readFileCallback(err, data) {
+                    if (err) {
+                        return res.status(500).send('error');
+                    } else {
+                        let json;
+                        let obj = JSON.parse(data);
+
+                        // si c'est une modif
+                        if (req.params.id) {
+                            obj.find(elt => {
+                                if (elt.id == req.params.id) {
+                                    elt.titre = datas.titre;
+                                    elt.resume = datas.resume;
+                                }
+                            });
+                        } else {
+                            obj.push(datas);
+                        }
+                        json = JSON.stringify(obj);
+                        fs.writeFile(config.get('movies_data'), json, 'utf8', () => console.log(''));
+                    }
+                });
+                return res.status(200).send('ok');
+            }
         }
     })
 });
+
+
+function checkErrors(errorsArray, datas, req) {
+    if (req.file == null) {
+        errorsArray.push('file');
+    }
+    Object.keys(datas).forEach(elt => {
+        if (!datas[elt] || datas[elt].trim().length === 0) {
+            errorsArray.push(elt);
+        }
+    });
+}
 
 export default app;
