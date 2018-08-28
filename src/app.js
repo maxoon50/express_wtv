@@ -100,6 +100,7 @@ app.post('/film/:id?', function (req, res) {
                         if (req.params.id) {
                             obj.find(elt => {
                                 if (elt.id == req.params.id) {
+                                    console.log('oki')
                                     elt.titre = datas.titre;
                                     elt.resume = datas.resume;
                                 }
