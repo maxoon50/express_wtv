@@ -9,11 +9,11 @@ import config from 'config';
 app.use(express.static('public'));
 app.use(bodyParser.json());
 let urlencodedParser = bodyParser.urlencoded({extended: false});
-const DOMAIN_NAME = 'http://localhost:8080';
+const DOMAIN_NAME = 'http://localhost:8081';
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", DOMAIN_NAME);
-    res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE');
     res.header("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
@@ -53,7 +53,7 @@ app.get('/films/:id', function (req, res) {
 
 });
 
-app.delete('/films/:id', function (req, res) {
+app.del('/film/:id', function (req, res) {
     let id = req.params.id;
 
     if (!isNaN(parseInt(id, 10)) && id > 0) {
@@ -100,6 +100,7 @@ app.post('/film/:id?', function (req, res) {
                         if (req.params.id) {
                             obj.find(elt => {
                                 if (elt.id == req.params.id) {
+                                    console.log('oki')
                                     elt.titre = datas.titre;
                                     elt.resume = datas.resume;
                                 }
@@ -119,9 +120,9 @@ app.post('/film/:id?', function (req, res) {
 
 
 function checkErrors(errorsArray, datas, req) {
-    if (req.file == null) {
+ /*   if (req.file == null) {
         errorsArray.push('file');
-    }
+    }*/
     Object.keys(datas).forEach(elt => {
         if (!datas[elt] || datas[elt].trim().length === 0) {
             errorsArray.push(elt);
